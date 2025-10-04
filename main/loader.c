@@ -2399,10 +2399,48 @@ static int loader_config_init(struct load_order *load_order)
 	struct ast_flags config_flags = { 0 };
 
 	cfg = ast_config_load2(AST_MODULE_CONFIG, "" /* core, can't reload */, config_flags);
-	if (cfg == CONFIG_STATUS_FILEMISSING || cfg == CONFIG_STATUS_FILEINVALID) {
-		ast_log(LOG_WARNING, "'%s' invalid or missing.\n", AST_MODULE_CONFIG);
-
+	if (cfg == CONFIG_STATUS_FILEINVALID) {
+		ast_log(LOG_WARNING, "'%s' is invalid.\n", AST_MODULE_CONFIG);
 		return -1;
+	}
+
+	if (cfg == CONFIG_STATUS_FILEMISSING) {
+		/* If modules.conf is missing, use default behavior (autoload=yes) */
+		ast_log(LOG_NOTICE, "'%s' is missing, using default behavior (autoload=yes).\n", AST_MODULE_CONFIG);
+		/* Scan the modules directory and add all modules to load order */
+		DIR *dir = opendir(ast_config_AST_MODULE_DIR);
+		struct dirent *dirent;
+
+		if (dir) {
+			while ((dirent = readdir(dir))) {
+				int ld = strlen(dirent->d_name);
+
+				/* Must end in .so to load it.  */
+
+				if (ld < 4)
+					continue;
+
+				if (strcasecmp(dirent->d_name + ld - 3, ".so"))
+					continue;
+
+				/* if there is already a module by this name in the module_list,
+				   skip this file */
+				if (find_resource(dirent->d_name, 0))
+					continue;
+
+				if (!add_to_load_order(dirent->d_name, load_order, 0, 0, 0)) {
+					closedir(dir);
+					return -1;
+				}
+			}
+
+			closedir(dir);
+		} else {
+			ast_log(LOG_ERROR, "Unable to open modules directory '%s'.\n", ast_config_AST_MODULE_DIR);
+			return -1;
+		}
+
+		return 0;
 	}
 
 	/* first, find all the modules we have been explicitly requested to load */
