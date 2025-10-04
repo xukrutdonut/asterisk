@@ -48,7 +48,7 @@ RUN apt-get update && \
     liburiparser-dev \
     libxslt1-dev \
     libssl-dev \
-    libmysqlclient-dev \
+    libmariadb-dev-compat \
     libbluetooth-dev \
     libradcli-dev \
     freetds-dev \
@@ -147,7 +147,7 @@ RUN mkdir -p /build && \
     --depends liblua5.2-0 \
     --depends liburiparser1 \
     --depends libxslt1.1 \
-    --depends libmysqlclient21 \
+    --depends libmariadb3 \
     --depends libbluetooth3 \
     --depends libradcli4 \
     --depends libsybdb5 \
@@ -211,7 +211,7 @@ RUN apt-get update && \
     liblua5.2-0 \
     liburiparser1 \
     libxslt1.1 \
-    libmysqlclient21 \
+    libmariadb3 \
     libbluetooth3 \
     libradcli4 \
     libsybdb5 \
