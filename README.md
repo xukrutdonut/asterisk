@@ -60,6 +60,32 @@ read the Change Logs.
 
 ### NEW INSTALLATIONS
 
+#### Docker Installation (Recommended for Raspberry Pi 5)
+
+The easiest way to run Asterisk on a Raspberry Pi 5 is using Docker:
+
+```bash
+# Clone the repository
+git clone https://github.com/xukrutdonut/asterisk.git
+cd asterisk
+
+# Build and run with Docker Compose
+docker compose up -d --build
+```
+
+This will build and start Asterisk with persistent volumes for configuration,
+sounds, and logs. To access the Asterisk CLI:
+
+```bash
+docker exec -it asterisk asterisk -rvvv
+```
+
+For more detailed Docker instructions, see:
+- [contrib/docker/README.rpi5.md](contrib/docker/README.rpi5.md) - Comprehensive Docker guide
+- [contrib/docker/QUICKSTART.rpi5.md](contrib/docker/QUICKSTART.rpi5.md) - Quick reference
+
+#### Manual Installation
+
 Ensure that your system contains a compatible compiler and development
 libraries.  Asterisk requires either the GNU Compiler Collection (GCC) version
 4.1 or higher, or a compiler that supports the C99 specification and some of

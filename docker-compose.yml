@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  asterisk:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VERSION: "20.0.0"
+    container_name: asterisk
+    # Use host network mode for simplest configuration
+    # This allows Asterisk to directly access the network
+    network_mode: host
+    restart: unless-stopped
+    
+    # Persistent volumes for configuration and data
+    volumes:
+      - asterisk-config:/etc/asterisk
+      - asterisk-sounds:/var/lib/asterisk/sounds
+      - asterisk-spool:/var/spool/asterisk
+      - asterisk-logs:/var/log/asterisk
+    
+    # Environment variables
+    environment:
+      - TZ=America/New_York
+    
+    # Optional: Resource limits for Raspberry Pi 5
+    # Uncomment and adjust based on your needs
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '2'
+    #       memory: 2G
+    #     reservations:
+    #       cpus: '1'
+    #       memory: 512M
+
+# Named volumes for persistent storage
+volumes:
+  asterisk-config:
+    driver: local
+  asterisk-sounds:
+    driver: local
+  asterisk-spool:
+    driver: local
+  asterisk-logs:
+    driver: local
