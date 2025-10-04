@@ -1,0 +1,57 @@
+;
+; Example dialplan for Raspberry Pi 5
+; Copy this to /etc/asterisk/extensions.conf in your container
+;
+
+[general]
+static=yes
+writeprotect=no
+clearglobalvars=no
+
+[globals]
+; Global variables can be defined here
+
+[from-internal]
+; Context for internal extensions
+; Extensions can dial each other
+
+; Allow dialing other extensions (1000-1099)
+exten => _10XX,1,NoOp(Call from ${CALLERID(all)} to ${EXTEN})
+ same => n,Dial(PJSIP/${EXTEN},20)
+ same => n,Hangup()
+
+; Voicemail access
+exten => *97,1,NoOp(Voicemail access)
+ same => n,VoiceMailMain(${CALLERID(num)}@default)
+ same => n,Hangup()
+
+; Echo test
+exten => *43,1,NoOp(Echo test)
+ same => n,Answer()
+ same => n,Wait(1)
+ same => n,Playback(demo-echotest)
+ same => n,Echo()
+ same => n,Hangup()
+
+; Speaking clock
+exten => *60,1,NoOp(Speaking clock)
+ same => n,Answer()
+ same => n,Wait(1)
+ same => n,SayUnixTime()
+ same => n,Hangup()
+
+; Music on hold test
+exten => *70,1,NoOp(Music on hold test)
+ same => n,Answer()
+ same => n,Wait(1)
+ same => n,MusicOnHold()
+
+[from-external]
+; Context for incoming calls from outside
+; Add your incoming call handling here
+
+exten => _X.,1,NoOp(Incoming call from ${CALLERID(all)})
+ same => n,Answer()
+ same => n,Wait(1)
+ same => n,Playback(hello-world)
+ same => n,Hangup()

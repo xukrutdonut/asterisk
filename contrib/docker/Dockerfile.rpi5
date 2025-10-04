@@ -1,0 +1,91 @@
+# Runtime Dockerfile for Asterisk on Raspberry Pi 5 (ARM64/aarch64)
+FROM debian:bookworm-slim
+
+LABEL maintainer="Asterisk Development Team"
+LABEL description="Asterisk runtime container for Raspberry Pi 5 (ARM64)"
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV REFRESHED_AT=2024-01-15
+ENV STARTDIR=/tmp
+ENV DEBPATH=./out
+
+# Copy the built DEB package
+COPY $DEBPATH/*.deb $STARTDIR/
+
+# Install runtime dependencies and Asterisk DEB
+RUN apt-get update && \
+    apt-get install -y \
+    # Core runtime dependencies
+    libedit2 \
+    libjansson4 \
+    libsqlite3-0 \
+    uuid-runtime \
+    libxml2 \
+    libssl3 \
+    # Additional runtime libraries
+    libspeex1 \
+    libspeexdsp1 \
+    libogg0 \
+    libvorbis0a \
+    libvorbisenc2 \
+    libasound2 \
+    portaudio19-dev \
+    libcurl4 \
+    libpq5 \
+    unixodbc \
+    libneon27 \
+    libgmime-3.0-0 \
+    liblua5.2-0 \
+    liburiparser1 \
+    libxslt1.1 \
+    libmysqlclient21 \
+    libbluetooth3 \
+    libradcli4 \
+    libsybdb5 \
+    libcap2 \
+    libsnmp40 \
+    libiksemel3 \
+    libcorosync-common4 \
+    libcpg4 \
+    libcfg7 \
+    libnewt0.52 \
+    libpopt0 \
+    libical3 \
+    libspandsp2 \
+    libresample1 \
+    libc-client2007e \
+    libsrtp2-1 \
+    libgsm1 \
+    zlib1g \
+    libldap-2.5-0 \
+    libcodec2-1.0 \
+    libfftw3-single3 \
+    libsndfile1 \
+    libunbound8 \
+    # Install the Asterisk package
+    && dpkg -i $STARTDIR/*.deb || apt-get install -f -y \
+    # Clean up
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* $STARTDIR/*.deb
+
+# Create necessary directories
+RUN mkdir -p /var/run/asterisk \
+    /var/log/asterisk \
+    /var/lib/asterisk \
+    /var/spool/asterisk \
+    /etc/asterisk
+
+# Expose standard Asterisk ports
+# SIP: 5060/udp, 5061/tcp (TLS)
+# RTP: 10000-20000/udp
+# HTTP/HTTPS: 8088/tcp, 8089/tcp
+# IAX2: 4569/udp
+EXPOSE 5060/udp 5060/tcp 5061/tcp 8088/tcp 8089/tcp 4569/udp
+EXPOSE 10000-20000/udp
+
+# Set working directory
+WORKDIR /var/lib/asterisk
+
+# Run Asterisk in foreground with console
+ENTRYPOINT ["/usr/sbin/asterisk"]
+CMD ["-f", "-vvvvv", "-g", "-c"]
