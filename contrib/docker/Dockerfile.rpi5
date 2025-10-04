@@ -38,7 +38,7 @@ RUN apt-get update && \
     liblua5.2-0 \
     liburiparser1 \
     libxslt1.1 \
-    libmysqlclient21 \
+    libmariadb3 \
     libbluetooth3 \
     libradcli4 \
     libsybdb5 \

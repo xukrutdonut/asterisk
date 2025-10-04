@@ -46,7 +46,7 @@ RUN apt-get update && \
     liburiparser-dev \
     libxslt1-dev \
     libssl-dev \
-    libmysqlclient-dev \
+    libmariadb-dev-compat \
     libbluetooth-dev \
     libradcli-dev \
     freetds-dev \

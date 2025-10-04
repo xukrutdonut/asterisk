@@ -68,7 +68,7 @@ fpm -t deb -s dir -n asterisk-rpi5 --version "$VERSION" \
     --depends liblua5.2-0 \
     --depends liburiparser1 \
     --depends libxslt1.1 \
-    --depends libmysqlclient21 \
+    --depends libmariadb3 \
     --depends libbluetooth3 \
     --depends libradcli4 \
     --depends libsybdb5 \
