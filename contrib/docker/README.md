@@ -1,7 +1,15 @@
 # Building Asterisk into a Docker Container Image
+
+> **Note for Raspberry Pi 5 Users:** If you're building for Raspberry Pi 5 (ARM64), please see [README.rpi5.md](README.rpi5.md) for specific instructions.
+
 The following set of steps should leave you with a Docker container that
 is relatively small, built from your local checked out source, and even
 provides you with a nice little RPM too!
+
+## Architecture Support
+
+- **x86_64 (default):** CentOS 7 based, builds RPM packages
+- **ARM64/aarch64 (Raspberry Pi 5):** Debian based, builds DEB packages (see [README.rpi5.md](README.rpi5.md))
 
 ## Build the package container image
 Build the package container image. This uses FPM[1] so no `spec` files and
