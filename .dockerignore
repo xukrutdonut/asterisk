@@ -1,0 +1,29 @@
+# Git files
+.git
+.gitignore
+.github
+
+# Build artifacts
+out
+*.o
+*.so
+*.a
+*.deb
+*.rpm
+*.tar.gz
+
+# IDE and editor files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Docker files (avoid recursion)
+docker-compose*.yml
+.dockerignore
