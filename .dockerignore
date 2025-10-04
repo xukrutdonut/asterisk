@@ -12,14 +12,6 @@ out
 *.rpm
 *.tar.gz
 
-# Documentation that's not needed for build
-*.md
-doc/
-docs/
-
-# Test files
-tests/
-
 # IDE and editor files
 .vscode
 .idea
@@ -35,7 +27,3 @@ temp/
 # Docker files (avoid recursion)
 docker-compose*.yml
 .dockerignore
-
-# CI/CD files
-.gitlab-ci.yml
-.travis.yml
