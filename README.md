@@ -69,6 +69,9 @@ The easiest way to run Asterisk on a Raspberry Pi 5 is using Docker:
 git clone https://github.com/xukrutdonut/asterisk.git
 cd asterisk
 
+# Optional: Verify your setup
+./verify-docker.sh
+
 # Build and run with Docker Compose
 docker compose up -d --build
 ```
@@ -81,6 +84,8 @@ docker exec -it asterisk asterisk -rvvv
 ```
 
 For more detailed Docker instructions, see:
+- **[DOCKER.md](DOCKER.md)** - Complete Docker guide (English)
+- **[INICIO-RAPIDO-RPI5.md](INICIO-RAPIDO-RPI5.md)** - Guía de inicio rápido (Español)
 - [contrib/docker/README.rpi5.md](contrib/docker/README.rpi5.md) - Comprehensive Docker guide
 - [contrib/docker/QUICKSTART.rpi5.md](contrib/docker/QUICKSTART.rpi5.md) - Quick reference
 
