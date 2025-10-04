@@ -1,0 +1,86 @@
+;
+; Example PJSIP configuration for Raspberry Pi 5
+; Copy this to /etc/asterisk/pjsip.conf in your container
+;
+
+[global]
+type=global
+max_forwards=70
+user_agent=Asterisk PBX (RPi5)
+default_realm=raspberrypi.local
+
+;
+; Transport configuration
+;
+[udp_transport]
+type=transport
+protocol=udp
+bind=0.0.0.0:5060
+external_media_address=YOUR_EXTERNAL_IP
+external_signaling_address=YOUR_EXTERNAL_IP
+; Uncomment if behind NAT
+;local_net=192.168.1.0/24
+
+[tcp_transport]
+type=transport
+protocol=tcp
+bind=0.0.0.0:5060
+
+;
+; Template for phone endpoints
+;
+[endpoint_template](!)
+type=endpoint
+context=from-internal
+disallow=all
+allow=ulaw
+allow=alaw
+allow=gsm
+allow=g722
+direct_media=no
+ice_support=yes
+force_rport=yes
+rewrite_contact=yes
+rtp_symmetric=yes
+dtmf_mode=rfc4733
+
+[auth_template](!)
+type=auth
+auth_type=userpass
+
+[aor_template](!)
+type=aor
+max_contacts=1
+remove_existing=yes
+
+;
+; Example extension 1000
+;
+[1000](endpoint_template)
+auth=1000
+aors=1000
+callerid=Extension 1000 <1000>
+
+[1000](auth_template)
+password=CHANGE_THIS_PASSWORD
+username=1000
+
+[1000](aor_template)
+
+;
+; Example extension 1001
+;
+[1001](endpoint_template)
+auth=1001
+aors=1001
+callerid=Extension 1001 <1001>
+
+[1001](auth_template)
+password=CHANGE_THIS_PASSWORD
+username=1001
+
+[1001](aor_template)
+
+;
+; Add more extensions as needed following the pattern above
+;
